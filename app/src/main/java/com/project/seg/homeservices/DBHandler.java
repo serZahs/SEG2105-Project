@@ -185,7 +185,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor getEmail() {
 
-        SQLiteDatebase db = this.getWritableDataBase();
+        SQLiteDatebase db = this.getWritableDatabase();
         String query = "SELECT EMAIL FROM " + TABLE_USERS;
         Cursor data = db.rawQuery(query, null);
         return data;
