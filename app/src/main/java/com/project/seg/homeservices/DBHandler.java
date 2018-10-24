@@ -136,6 +136,7 @@ public class DBHandler extends SQLiteOpenHelper {
     /**
      * Creates a user after checking if the email is valid and the username is not taken.
      * note: type checker will be made later
+     *
      * @param email email input field
      * @param username username input field
      * @param password password input field
