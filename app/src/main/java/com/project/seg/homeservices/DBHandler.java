@@ -174,4 +174,20 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return true;
     }
+
+    public Cursor getUsername() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT USERNAME FROM " + TABLE_USERS;
+        Cursor data =  db.rawQuery(query, null);
+        return data;
+
+    }
+
+    public Cursor getEmail() {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT EMAIL FROM " + TABLE_USERS;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
 }
