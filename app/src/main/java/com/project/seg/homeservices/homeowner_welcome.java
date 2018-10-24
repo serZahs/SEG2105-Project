@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
 import android.content.ContentValues;
+
 import android.database.Cursor;
 
 public class homeowner_welcome extends AppCompatActivity {
