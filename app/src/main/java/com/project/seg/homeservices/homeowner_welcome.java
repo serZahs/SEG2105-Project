@@ -41,9 +41,4 @@ public class homeowner_welcome extends AppCompatActivity {
     }
 
 
-
-
-
-
-
 }

@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="password"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName|textPassword" />
 
         <LinearLayout
             android:id="@+id/selectTypeLayout"
@@ -42,13 +42,42 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/selectTypeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
+            <RadioGroup
+                android:id="@+id/typeSelector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/typeDisplayText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Type" />
+
+                <RadioButton
+                    android:id="@+id/typeAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Admin" />
+
+                <RadioButton
+                    android:id="@+id/typeHomeOwner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Home Owner" />
+
+                <RadioButton
+                    android:id="@+id/typeServiceProvider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Service Provider" />
+
+            </RadioGroup>
         </LinearLayout>
 
         <LinearLayout
@@ -64,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="attemptCreateAccount"
-                android:text="Button" />
+                android:text="create account" />
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
