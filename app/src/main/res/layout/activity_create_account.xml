@@ -4,53 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".CreateAccountActivity">
 
     <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/emailField"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="email"
             android:inputType="textPersonName" />
 
         <EditText
+            android:id="@+id/usernameField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="username"
+            android:inputType="textPersonName" />
+
+        <EditText
             android:id="@+id/passwordField"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="password"
             android:inputType="textPersonName" />
 
         <LinearLayout
-            android:id="@+id/buttonLayout"
+            android:id="@+id/selectTypeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/selectTypeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="attemptLogin"
-                android:text="login" />
+                android:text="Button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/createAccountLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/createAccountButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="createNewAccount"
-                android:text="create account" />
+                android:onClick="attemptCreateAccount"
+                android:text="Button" />
         </LinearLayout>
-
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>
