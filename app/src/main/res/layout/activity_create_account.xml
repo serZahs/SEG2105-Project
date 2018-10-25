@@ -34,22 +34,43 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="password"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName|textPassword" />
 
-        <LinearLayout
-            android:id="@+id/selectTypeLayout"
+        <RadioGroup
+            android:id="@+id/typeSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/selectTypeButton"
+            <TextView
+                android:id="@+id/typeSelectDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="Type" />
 
-        </LinearLayout>
+            <RadioButton
+                android:id="@+id/typeSelectorAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Admin" />
+
+            <RadioButton
+                android:id="@+id/typeSelectorHomeOwner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Home Owner" />
+
+            <RadioButton
+                android:id="@+id/typeSelectorServiceProvider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="RadioButton" />
+        </RadioGroup>
 
         <LinearLayout
             android:id="@+id/createAccountLayout"
@@ -64,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="attemptCreateAccount"
-                android:text="Button" />
+                android:text="create account" />
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -4,12 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.Toast;
-import android.widget.Button;
 public class CreateAccountActivity extends AppCompatActivity {
 
     EditText email, username, password;
-    Button selectType;
+    RadioGroup typeSelector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +19,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         email = findViewById(R.id.emailField);
         username = findViewById(R.id.usernameField);
         password = findViewById(R.id.passwordField);
-        selectType = findViewById(R.id.selectTypeButton);
-
-        selectType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // to be implemented
-            }
-        });
+        typeSelector = findViewById(R.id.typeSelector);
 
         email.setText(getIntent().getStringExtra("emailField"));
     }
@@ -40,9 +33,26 @@ public class CreateAccountActivity extends AppCompatActivity {
      */
     public void attemptCreateAccount(View view) {
         DBHandler db = new DBHandler(this);
+        int selectedID = typeSelector.getCheckedRadioButtonId();
+        String type = "";
+
+        // uses radio button group to determine which type was selected
+        switch (selectedID) {
+            case 0:
+                type = DBHandler.DATABASE_TYPE_ADMIN;
+                break;
+
+            case 1:
+                type = DBHandler.DATABASE_TYPE_HOME_OWNER;
+                break;
+
+            default:
+                type = DBHandler.DATABASE_TYPE_SERVICE_PROVIDER;
+                break;
+        }
 
         if (!db.createUser(email.getText().toString(), username.getText().toString(),
-                password.getText().toString(), DBHandler.DATABASE_TYPE_HOME_OWNER)) {
+                password.getText().toString(), type)) {
             if (!db.isValidEmail((email.getText().toString())))
                 Toast.makeText(getApplicationContext(), "invalid email input", Toast.LENGTH_SHORT).show();
             else
@@ -54,7 +64,4 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void selectUserType() {
-        // implement later
-    }
 }
