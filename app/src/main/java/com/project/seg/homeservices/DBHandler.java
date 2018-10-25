@@ -2,7 +2,6 @@ package com.project.seg.homeservices;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -148,13 +147,53 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
+     * returns whether or not the email input has already been used for an account.
+     * note: does not check if email is valid or not
+     * @param email email input field
+     * @return boolean whether or not the email is taken
+     */
+    public boolean isAvailableEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String emailCheck = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE EMAIL = \""
+                + email + "\"";
+
+        Cursor checkCursor = db.rawQuery(emailCheck, null);
+
+        if (checkCursor.moveToFirst()) // if the email is already used return false
+            return false;
+
+        return true;
+    }
+    /**
+     * returns whether or not the username input has already been used for an account.
+     *
+     * @param username username input field
+     * @return boolean whether or not the username is taken (true for not)
+     */
+    public boolean isAvailableUsername(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String usernameCheck = "SELECT USERNAME FROM " + TABLE_USERS + " WHERE USERNAME = \""
+                + username + "\"";
+
+        Cursor checkCursor = db.rawQuery(usernameCheck, null);
+
+        if (checkCursor.moveToFirst()) // if the username is used return false
+            return false;
+
+        return true;
+    }
+
+    /**
      * Creates a user after checking if the email is valid and the username is not taken.
-     * note: type checker will be made later
+     * If the type of user is admin, a query is executed which returns all admin users. If
+     * the set is empty, then the user is created, otherwise false is returned.
      *
      * @param email email input field
      * @param username username input field
      * @param password password input field
-     * @param type type selector (not yet implemented)
+     * @param type type selector
      * @return boolean whether or not the user was created (for validity)
      */
     public boolean createUser(String email, String username, String password, String type) {
@@ -163,23 +202,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        /** The following two queries are used to check if the username and email are
-         * already associated with an account in the table
-         */
-        String usernameCheck = "SELECT USERNAME FROM " + TABLE_USERS + " WHERE USERNAME = \""
-                + username + "\"";
-
-        String emailCheck = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE EMAIL = \""
-                + email + "\"";
-
-        Cursor checkCursor = db.rawQuery(usernameCheck, null);
-
-        if (checkCursor.moveToFirst()) // if the username is used return false
-            return false;
-
-        checkCursor = db.rawQuery(emailCheck, null);
-
-        if (checkCursor.moveToFirst()) // if the email is already used return false
+        if (!isAvailableEmail(email) || !isAvailableUsername(username))
             return false;
 
         // add account to table if the account is valid
@@ -188,7 +211,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_EMAIL, email);
         values.put(COLUMN_USERNAME, username);
         values.put(COLUMN_PASSWORD, password);
-        values.put(COLUMN_USER_TYPE, DATABASE_TYPE_HOME_OWNER);
+        values.put(COLUMN_USER_TYPE, type);
 
         db.insert(TABLE_USERS, null, values);
         db.close();
@@ -262,18 +285,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Attempts to add a service to the list of services. If it is already present in the service database
-     * then false is returned. If it is not a valid service, false is returned. Otherwise, it is added to the
-     * database.
+     * Checks to see if the service is already added to the database.
+     * note: does not check if the service is valid or not
      *
-     * @param service
-     * @param rate
-     * @return
+     * @param service service being added
+     * @return boolean whether or not the service was already added
      */
-    public boolean addService(String service, double rate) {
-        if (!isValidService(service) || !isValidRate(rate)) // if either entry is not valid, return false
-            return false;
-
+    public boolean checkServiceAdded(String service) {
         SQLiteDatabase db = this.getReadableDatabase();
         // query to check if the service is already added
         String serviceCheck = "SELECT SERVICE FROM " + COLUMN_SERVICE_NAME + " WHERE SERVICE = \""
@@ -283,6 +301,33 @@ public class DBHandler extends SQLiteOpenHelper {
         // the service was already in the set
         if (checkCursor.moveToFirst())
             return false;
+
+        return true;
+    }
+    /**
+     * Attempts to add a service to the list of services. If it is already present in the service database
+     * then false is returned. If it is not a valid service, false is returned. Otherwise, it is added to the
+     * database.
+     *
+     * @param service service being created
+     * @param rate rate of pay for service
+     * @return boolean whether or not the service was added
+     */
+    public boolean addService(String service, double rate) {
+        if (!isValidService(service))
+            return false;
+
+        if (!checkServiceAdded(service))
+            return false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_SERVICE_NAME, service);
+        values.put(COLUMN_SERVICE_RATE, rate);
+
+        db.insert(TABLE_SERVICES, null, values);
+        db.close();
 
         return true;
     }
