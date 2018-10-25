@@ -19,6 +19,6 @@ public class AdminMainActivity extends AppCompatActivity {
         TextView wMsg = findViewById(R.id.welcomeMsg);
         Intent intent = getIntent();
         String username = intent.getExtras().getString("username");
-        wMsg.setText("Welcome " + username);
+        wMsg.setText("Welcome Admin " + username);
     }
 }
