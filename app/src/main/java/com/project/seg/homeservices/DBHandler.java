@@ -11,22 +11,32 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Accounts.db";
 
-    public static final String TABLE_USERS = "allAccountsInfo";
+    private static final String TABLE_USERS = "allAccountsInfo";
 
-    public static final String COLUMN_EMAIL = "EMAIL";
-    public static final String COLUMN_USERNAME = "USERNAME";
-    public static final String COLUMN_PASSWORD = "PASSWORD";
-    public static final String COLUMN_USER_TYPE = "USERTYPE";
+    private static final String COLUMN_EMAIL = "EMAIL";
+    private static final String COLUMN_USERNAME = "USERNAME";
+    private static final String COLUMN_PASSWORD = "PASSWORD";
+    private static final String COLUMN_USER_TYPE = "USERTYPE";
 
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
     public static final String DATABASE_TYPE_SERVICE_PROVIDER = "SERVICEPROVIDER";
 
     private static final String DATABASE_CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USERS
-                                                            + "(" + COLUMN_EMAIL + " TEXT UNIQUE PRIMARY KEY,"
-                                                            + COLUMN_USERNAME + " TEXT UNIQUE,"
-                                                            + COLUMN_PASSWORD + " TEXT,"
-                                                            + COLUMN_USER_TYPE + " TEXT)";
+            + "(" + COLUMN_EMAIL + " TEXT UNIQUE PRIMARY KEY,"
+            + COLUMN_USERNAME + " TEXT UNIQUE,"
+            + COLUMN_PASSWORD + " TEXT,"
+            + COLUMN_USER_TYPE + " TEXT)";
+
+    private static final String TABLE_SERVICES = "allServicesInfo";
+
+    private static final String COLUMN_SERVICE_NAME = "SERVICE";
+    private static final String COLUMN_SERVICE_RATE = "RATE";
+
+    private static final String DATABASE_CREATE_SERVICE_TABLE = "CREATE TABLE " + TABLE_SERVICES
+            + "(" + COLUMN_SERVICE_NAME
+            + " TEXT UNIQUE PRIMARY KEY,"
+            + COLUMN_SERVICE_RATE + " DOUBLE)";
 
 
     public DBHandler(Context context) {
@@ -36,14 +46,18 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_USER_TABLE);
+        db.execSQL(DATABASE_CREATE_SERVICE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,
                           int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
         onCreate(db);
     }
+
+    // Functions pertaining to the users database
 
     /**
      * Checks if the email input is of the correct format. That is to say
@@ -54,7 +68,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param email email input field
      * @return boolean whether or not the email is valid format
      */
-    private boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {
         char currentChar = ' ';
         int atIndex, dotIndex;
         String splitStringLocal, splitStringDomain, splitStringEnd;
@@ -122,8 +136,8 @@ public class DBHandler extends SQLiteOpenHelper {
             return false;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT EMAIL, PASSWORD FROM " + TABLE_USERS + " WHERE EMAIL = "
-                        + email + " AND PASSWORD = " + password;
+        String query = "SELECT EMAIL, PASSWORD FROM " + TABLE_USERS + " WHERE EMAIL = \""
+                + email + "\" AND PASSWORD = \"" + password + "\"";
         Cursor cursor = db.rawQuery(query, null);
 
         // If the returned set is empty, return false
@@ -140,7 +154,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param email email input field
      * @param username username input field
      * @param password password input field
-     * @param type type selector
+     * @param type type selector (not yet implemented)
      * @return boolean whether or not the user was created (for validity)
      */
     public boolean createUser(String email, String username, String password, String type) {
@@ -148,17 +162,15 @@ public class DBHandler extends SQLiteOpenHelper {
             return false;
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "INSERT INTO " + TABLE_USERS + " VALUES(" + email + ","
-                        + username + "," + password +  "," + type + ")";
 
         /** The following two queries are used to check if the username and email are
          * already associated with an account in the table
          */
-        String usernameCheck = "SELECT USERNAME FROM " + TABLE_USERS + " WHERE USERNAME = "
-                                + username + ")";
+        String usernameCheck = "SELECT USERNAME FROM " + TABLE_USERS + " WHERE USERNAME = \""
+                + username + "\"";
 
-        String emailCheck = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE EMAIL = "
-                            + email + ")";
+        String emailCheck = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE EMAIL = \""
+                + email + "\"";
 
         Cursor checkCursor = db.rawQuery(usernameCheck, null);
 
@@ -171,7 +183,106 @@ public class DBHandler extends SQLiteOpenHelper {
             return false;
 
         // add account to table if the account is valid
-        db.execSQL(query);
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_EMAIL, email);
+        values.put(COLUMN_USERNAME, username);
+        values.put(COLUMN_PASSWORD, password);
+        values.put(COLUMN_USER_TYPE, DATABASE_TYPE_HOME_OWNER);
+
+        db.insert(TABLE_USERS, null, values);
+        db.close();
+
+        return true;
+    }
+
+    /**
+     * After validation that an email corresponds to an account, the user is returned
+     *
+     * @param email email input field
+     * @return User the user corresponding to the email
+     */
+    public User getUser(String email) {
+        String query = "SELECT USERNAME FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        String userEmail = entryCursor.getString(0);
+        String userName = entryCursor.getString(1);
+        String userPassword = entryCursor.getString(2);
+        String userType = entryCursor.getString(3);
+
+        User user = null;
+
+        switch (userType) {
+            case DATABASE_TYPE_ADMIN:
+                user = new Admin(userEmail, userName, userPassword);
+                break;
+
+            case DATABASE_TYPE_HOME_OWNER:
+                user = new HomeOwner(userEmail, userName, userPassword);
+
+            default:
+                user = new ServiceProvider(userEmail, userName, userPassword);
+        }
+
+        return user;
+    }
+
+    // Functions pertaining to the services database
+
+    /**
+     * Checks if the service input is valid. (not sure how to implement choosing yet).
+     * If the service is equal to any of the possible services detailed in the admin class,
+     * true is returned. Otherwise false is returned.
+     *
+     * @param service service input
+     * @return boolean whether or not the service name is valid
+     */
+    public boolean isValidService(String service) {
+        for (int possibleService = 0; possibleService < Admin.SERVICES_OFFERED.length;
+             possibleService++)
+            if (service.equals(Admin.SERVICES_OFFERED[possibleService]))
+                return true;
+
+        return false;
+    }
+
+    /**
+     * Simply checks if a rate is valid or not. 0 == free
+     *
+     * @param rate rate per hour of pay for service
+     * @return boolean whether or not the rate is valid
+     */
+    public boolean isValidRate(double rate) {
+        if (rate < 0)
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Attempts to add a service to the list of services. If it is already present in the service database
+     * then false is returned. If it is not a valid service, false is returned. Otherwise, it is added to the
+     * database.
+     *
+     * @param service
+     * @param rate
+     * @return
+     */
+    public boolean addService(String service, double rate) {
+        if (!isValidService(service) || !isValidRate(rate)) // if either entry is not valid, return false
+            return false;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        // query to check if the service is already added
+        String serviceCheck = "SELECT SERVICE FROM " + COLUMN_SERVICE_NAME + " WHERE SERVICE = \""
+                + service + "\"";
+        Cursor checkCursor = db.rawQuery(serviceCheck, null);
+
+        // the service was already in the set
+        if (checkCursor.moveToFirst())
+            return false;
 
         return true;
     }
