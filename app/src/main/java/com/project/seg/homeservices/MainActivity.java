@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.passwordField);
     }
 
+
     /**
      * Attempts to login to the app. DBHandler is used to see
      * If the input fields contain values corresponding to an entry
@@ -28,10 +29,28 @@ public class MainActivity extends AppCompatActivity {
      * @param view login activity
      */
     public void attemptLogin(View view) {
-        DBHandler dbHandler = new DBHandler(this);
+        DBHandler db = new DBHandler(this);
 
-        if (dbHandler.isValidUser(email.getText().toString(), password.getText().toString())) {
+        if (db.isValidUser(email.getText().toString(), password.getText().toString())) {
             Toast.makeText(getApplicationContext(), "authentification successful", Toast.LENGTH_SHORT).show();
+
+            /**
+             * Checks type of user that corresponds with the email and the appropriate activity is opened
+             */
+            User account = db.getUser(email.getText().toString());
+            Intent openAccountActivity = null;
+
+            if (account instanceof Admin)
+                openAccountActivity = new Intent(getApplicationContext(), AdminMainActivity.class);
+
+//            if (account instanceof HomeOwner)
+//                openAccountActivity = new Intent(getApplicationContext(), HomeOwnerMainActivity.class);
+
+//            if (account instanceof ServiceProvider)
+//                openAccountActivity = new Intent(getApplicationContext(), ServiceProviderMainActivity.class);
+
+            openAccountActivity.putExtra("usernameField", account.getUsername());
+            startActivity(openAccountActivity);
         }
         else
             Toast.makeText(getApplicationContext(), "email or password was invalid", Toast.LENGTH_LONG).show();
