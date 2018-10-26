@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.widget.Toast;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -186,6 +187,22 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
+     * returns whether or not there already exists a admin in the database.
+     *
+     * @return boolean whether or not there exists an admin in the database (true if there is none)
+     */
+    public boolean alreadyExistsAdmin() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE USERTYPE = \"ADMIN\"";
+        Cursor checkCursor = db.rawQuery(query, null);
+
+        if (!checkCursor.moveToFirst())
+            return true;
+
+        return false;
+    }
+
+    /**
      * Creates a user after checking if the email is valid and the username is not taken.
      * If the type of user is admin, a query is executed which returns all admin users. If
      * the set is empty, then the user is created, otherwise false is returned.
@@ -203,6 +220,9 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         if (!isAvailableEmail(email) || !isAvailableUsername(username))
+            return false;
+
+        if (type.equals(DATABASE_TYPE_ADMIN) && !alreadyExistsAdmin())
             return false;
 
         // add account to table if the account is valid
@@ -330,5 +350,17 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         return true;
+    }
+
+    // Function that clears databases contents. Used for testing
+
+    public void deleteTables() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
+        db.execSQL(DATABASE_CREATE_USER_TABLE);
+        db.execSQL(DATABASE_CREATE_SERVICE_TABLE);
+        db.close();
     }
 }

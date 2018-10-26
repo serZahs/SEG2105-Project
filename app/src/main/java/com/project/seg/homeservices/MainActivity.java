@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(openAccountActivity);
         }
         else
-            Toast.makeText(getApplicationContext(), "email or password was invalid", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "email or password was invalid", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -68,5 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         openCreateAccount.putExtra("emailField", email.getText().toString());
         startActivity(openCreateAccount);
+    }
+
+    public void deleteDatabase(View view) {
+        DBHandler db = new DBHandler(this);
+
+        db.deleteTables();
+
+        Toast.makeText(getApplicationContext(), "database has been cleared", Toast.LENGTH_SHORT).show();
     }
 }

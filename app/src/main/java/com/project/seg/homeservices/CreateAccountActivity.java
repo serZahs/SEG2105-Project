@@ -38,11 +38,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         // uses radio button group to determine which type was selected
         switch (selectedID) {
-            case 0:
+            case R.id.typeSelectorAdmin:
                 type = DBHandler.DATABASE_TYPE_ADMIN;
                 break;
 
-            case 1:
+            case R.id.typeSelectorHomeOwner:
                 type = DBHandler.DATABASE_TYPE_HOME_OWNER;
                 break;
 
@@ -56,10 +56,13 @@ public class CreateAccountActivity extends AppCompatActivity {
             if (!db.isValidEmail((email.getText().toString())))
                 Toast.makeText(getApplicationContext(), "invalid email input", Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(getApplicationContext(), "email has already been used", Toast.LENGTH_SHORT).show();
+                if (type.equals(DBHandler.DATABASE_TYPE_ADMIN) && !db.alreadyExistsAdmin())
+                    Toast.makeText(getApplicationContext(), "admin account already exists", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getApplicationContext(), "email has already been used", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(getApplicationContext(), "account has been created", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "account has been created", Toast.LENGTH_SHORT).show();
             finish(); // activity is finished
         }
     }
