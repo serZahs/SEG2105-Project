@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
             if (type.equals(DBHandler.DATABASE_TYPE_ADMIN))
                 openAccountActivity = new Intent(getApplicationContext(), AdminMainActivity.class);
 
-//            if (type.equals(DBHandler.DATABASE_TYPE_HOME_OWNER))
-//                openAccountActivity = new Intent(getApplicationContext(), HomeOwnerMainActivity.class);
-//
-//            if (type.equals(DBHandler.DATABASE_TYPE_SERVICE_PROVIDER))
-//                openAccountActivity = new Intent(getApplicationContext(), ServiceProviderMainActivity.class);
+            if (type.equals(DBHandler.DATABASE_TYPE_HOME_OWNER))
+                openAccountActivity = new Intent(getApplicationContext(), HomeOwnerMainActivity.class);
+
+            if (type.equals(DBHandler.DATABASE_TYPE_SERVICE_PROVIDER))
+                openAccountActivity = new Intent(getApplicationContext(), ServiceProviderMainActivity.class);
 
             openAccountActivity.putExtra("emailField", email.getText().toString());
             startActivity(openAccountActivity);

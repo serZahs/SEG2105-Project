@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-public class HomeOwnerMainActivity extends AppCompatActivity {
+public class ServiceProviderMainActivity extends AppCompatActivity {
 
     TextView username;
 

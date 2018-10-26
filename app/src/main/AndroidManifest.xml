@@ -16,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ServiceProvider" />
+        <activity android:name=".ServiceProviderMainActivity" />
         <activity android:name=".AdminMainActivity" />
+        <activity android:name=".HomeOwnerMainActivity" />
         <activity android:name=".CreateAccountActivity"></activity>
     </application>
 

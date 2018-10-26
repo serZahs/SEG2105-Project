@@ -7,41 +7,39 @@
     tools:context=".ServiceProvider">
 
     <LinearLayout
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/editText"
+        <LinearLayout
+            android:id="@+id/userDisplayLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ServiceProvider Page" />
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            tools:srcCompat="@tools:sample/avatars[0]" />
+            <TextView
+                android:id="@+id/usernameDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="username: " />
 
-        <TextView
-            android:id="@+id/textView2"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/accountTypeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Address" />
+            <TextView
+                android:id="@+id/typeAccountDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="account type: " />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Phone Number" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
