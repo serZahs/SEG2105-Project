@@ -220,36 +220,36 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * After validation that an email corresponds to an account, the user is returned
+     * After validation that an email corresponds to an account, the username is returned
      *
      * @param email email input field
-     * @return User the user corresponding to the email
+     * @return String username of account corresponding to email
      */
-    public User getUser(String email) {
+    public String getUsername(String email) {
         String query = "SELECT USERNAME FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor entryCursor = db.rawQuery(query, null);
 
-        String userEmail = entryCursor.getString(0);
-        String userName = entryCursor.getString(1);
-        String userPassword = entryCursor.getString(2);
-        String userType = entryCursor.getString(3);
+        entryCursor.moveToFirst();
 
-        User user = null;
+        return entryCursor.getString(0);
+    }
 
-        switch (userType) {
-            case DATABASE_TYPE_ADMIN:
-                user = new Admin(userEmail, userName, userPassword);
-                break;
+    /**
+     * returns the type of account corresponding to an email
+     * note: does not check the validity of the email
+     *
+     * @param email email input field
+     * @return String type of account
+     */
+    public String getRole(String email) {
+        String query = "SELECT USERTYPE FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
 
-            case DATABASE_TYPE_HOME_OWNER:
-                user = new HomeOwner(userEmail, userName, userPassword);
+        entryCursor.moveToFirst();
 
-            default:
-                user = new ServiceProvider(userEmail, userName, userPassword);
-        }
-
-        return user;
+        return entryCursor.getString(0);
     }
 
     // Functions pertaining to the services database

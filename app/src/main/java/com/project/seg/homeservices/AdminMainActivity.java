@@ -6,19 +6,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+
 public class AdminMainActivity extends AppCompatActivity {
+
+    TextView username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
-        setWelcomeMsg();
+
+        DBHandler db = new DBHandler(this);
+        String email = getIntent().getStringExtra("emailField");
+        username = findViewById(R.id.usernameDisplay);
+
+        username.setText(username.getText() + db.getUsername(email));
     }
 
-    private void setWelcomeMsg() {
-        TextView wMsg = findViewById(R.id.welcomeMsg);
-        Intent intent = getIntent();
-        String username = intent.getExtras().getString("username");
-        wMsg.setText("Welcome Admin " + username);
-    }
 }
