@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 public class CreateAccountActivity extends AppCompatActivity {
@@ -50,6 +51,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 type = DBHandler.DATABASE_TYPE_SERVICE_PROVIDER;
                 break;
         }
+
+        Toast.makeText(getApplicationContext(), type, Toast.LENGTH_SHORT).show();
 
         if (!db.createUser(email.getText().toString(), username.getText().toString(),
                 password.getText().toString(), type)) {

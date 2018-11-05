@@ -352,6 +352,54 @@ public class DBHandler extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Attempts to remove the service from the list of services. IF it is present in the service database
+     * the it will be removed, otherwise nothing will happen. Whether or not the service was removed from teh
+     * database will be returned.
+     *
+     * @param service name of service
+     * @return boolean whether or not the service was removed
+     */
+    public boolean removeService(String service) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // query to obtain any entry with this service name
+        String query = "SELECT SERVICE FROM " + TABLE_SERVICES + " WHERE SERVICE = \"" + service + "\"";
+        String delQuery  = "DELETE FROM " + TABLE_SERVICES + " WHERE SERVICE = \"" + service + "\"";
+        Cursor checkCursor = db.rawQuery(query, null);
+
+        // service was not present in the database
+        if (!checkCursor.moveToFirst())
+            return false;
+
+        // the service was present and was removed from the database
+        db.rawQuery(delQuery, null);
+        return true;
+    }
+
+    /**
+     * Attempts to modify the rate at which the service is charged for. If the new rate is invalid the
+     * false is returned. Otherwise true is returned and the rate of cost for the service is changed.
+     *
+     * @param service name of service
+     * @param newRate new rate for service
+     * @return boolean whether or not the rate was changed
+     */
+    public boolean modifyServiceRate(String service, double newRate) {
+        if (!isValidService(service)) // the service is invalid
+            return false;
+
+        if (!isValidRate(newRate)) // the new rate is invalid
+            return false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        // query that replaces rate of service with the new rate
+        String query = "UPDATE " + TABLE_SERVICES + " SET " + COLUMN_SERVICE_RATE + " = " + newRate
+                       + " WHERE " + COLUMN_SERVICE_NAME + " = " + service;
+
+        // executes query
+        db.execSQL(query);
+        return true;
+    }
     // Function that clears databases contents. Used for testing
 
     public void deleteTables() {
