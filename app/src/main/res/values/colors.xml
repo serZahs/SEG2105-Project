@@ -3,5 +3,13 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#83c6d3</color>
     <color name="colorAccent">#809CBA</color>
-    <color name="upblue">#83c6d3</color>
+    <color name="dark">#071013</color>
+    <color name="bluesat">#1D97AF</color>
+    <color name="fadedblue">#75ABBC</color>
+    <color name="leanblue">#809CBA</color>
+    <color name="neargrey">#DFE0E2</color>
+    <color name="upblue">#84c6d4</color>
+    <color name="downpurple">#b174c4</color>
+
+
 </resources>
