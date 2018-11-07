@@ -4,42 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/back_ground"
     tools:context=".ServiceProvider">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
-        <LinearLayout
-            android:id="@+id/userDisplayLayout"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/Service_Provider_Avatar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="115dp"
+            android:src="@mipmap/ic_launcher" />
 
-            <TextView
-                android:id="@+id/usernameDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="username: " />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/accountTypeLayout"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/usernameDisplay"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="227dp"
+            android:layout_weight="1"
+            android:text="username: " />
 
-            <TextView
-                android:id="@+id/typeAccountDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="account type: SERVICEPROVIDER" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/typeAccountDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:text="account type: SERVICEPROVIDER" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
