@@ -8,6 +8,7 @@
 package com.project.seg.homeservices;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Admin extends User {
 
@@ -79,6 +80,23 @@ public class Admin extends User {
                     rate));
             return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Checks whether or not the input service is one of the services set as available by
+     * the admin and returns whether or not it is.
+     *
+     * @param service service being checked
+     * @return boolean whether or not the service is available
+     */
+    public boolean isAvailableService(String service) {
+        Iterator<Service> serviceIterator = listOfServices.iterator();
+
+        while (serviceIterator.hasNext())
+            if (serviceIterator.next().equals(service))
+                return true;
 
         return false;
     }

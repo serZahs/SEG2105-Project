@@ -7,11 +7,15 @@
 
 package com.project.seg.homeservices;
 
+import java.util.ArrayList;
+
 public class ServiceProvider extends User {
 
     private int numberOfRatings; // starts with 0 ratings
     private int sumRating; // sum of rating home owner has gotten (starts at 0)
     private boolean available; // state of avaiability of service provider
+    private ArrayList<String> servicesProvided; // list of services provided
+    private Admin admin;
 
     /**
      * constructor for service provider class. (no availability specified)
@@ -19,13 +23,16 @@ public class ServiceProvider extends User {
      * @param email email input field
      * @param username username input field
      * @param password password input field
+     * @param admin admin of this service provider
      */
-    public ServiceProvider(String email, String username, String password) {
+    public ServiceProvider(String email, String username, String password, Admin admin) {
         super(email, username, password);
 
         sumRating = 0;
         numberOfRatings = 0;
         available = true; // by default, a service provider is available
+        this.admin = admin;
+        servicesProvided = new ArrayList<String>();
     }
 
     /**
@@ -35,14 +42,17 @@ public class ServiceProvider extends User {
      * @param username username input field
      * @param password password input field
      * @param available availability of service provider
+     * @param admin admin if this service provider
      */
     public ServiceProvider(String email, String username, String password,
-                           boolean available) {
+                           boolean available, Admin admin) {
         super(email, username, password);
 
         sumRating = 0;
         numberOfRatings = 0;
         this.available = available;
+        this.admin = admin;
+        servicesProvided = new ArrayList<String>();
     }
 
     /**
@@ -87,4 +97,43 @@ public class ServiceProvider extends User {
     public double returnRating() {
         return sumRating / numberOfRatings;
     }
+
+    /**
+     * Attempts to add a service to the services provided by this user. If the
+     * service exists, it is added and true is returned, otherwise false is returned and
+     * it is not added.
+     *
+     * @param service service being added
+     * @return boolean whether or not the service was added.
+     */
+    public boolean addService(String service) {
+        if (!admin.isAvailableService(service))
+            return false;
+
+        servicesProvided.add(service);
+        return true;
+    }
+
+    /**
+     * Attempts to remove the input service from this service provider. If the service is present
+     * the service is removed and true is returned. Otherwise false is returned.
+     *
+     * @param service service to be removed.
+     * @return boolean whether or not the service was removed.
+     */
+    public boolean removeService(String service) {
+        if (servicesProvided.contains(service)) {
+            servicesProvided.remove(service);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns an arraylist of the services this service provider provides
+     *
+     * @return ArrayList<String> an list of services provided
+     */
+    public ArrayList<String> getServices() { return servicesProvided;}
 }
