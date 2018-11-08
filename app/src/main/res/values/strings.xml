@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Home Services</string>
+    <string name="todo">TODO</string>
+    <string name="username">username:</string>
+    <string name="account_type_serviceprovider">account type: SERVICEPROVIDER</string>
+    <string name="add_service">Add Service</string>
+    <string name="rate_hour">Rate/hour</string>
+    <string name="servicename">serviceName</string>
 </resources>
