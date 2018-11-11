@@ -2,9 +2,9 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#83c6d3</color>
-    <color name="colorAccent">#809CBA</color>
+    <color name="colorAccent">#809cba</color>
     <color name="dark">#071013</color>
-    <color name="bluesat">#1D97AF</color>
+    <color name="bluesat">#1d97af</color>
     <color name="fadedblue">#75ABBC</color>
     <color name="leanblue">#809CBA</color>
     <color name="neargrey">#DFE0E2</color>

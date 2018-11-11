@@ -1,5 +1,5 @@
 /**
- * HomeOwner.java is a child of the user class. It contains functions and attributes specific to
+ * HomeOwner2.java is a child of the user class. It contains functions and attributes specific to
  * a home owner user along with inherited attributes and functions from user.
  *
  * @version 1.0
