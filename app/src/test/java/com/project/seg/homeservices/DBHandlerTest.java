@@ -4,9 +4,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DBHandlerTest {
-    // Can be enabled once the methods isValidEmail(), isValidService()
-    // and isValidRate() in DBHandler are declared static
-    /*@Test
+
+    @Test
     public void emailFormatIsValid() {
         boolean valid = DBHandler.isValidEmail("localpart@domain.com");
         assertTrue(valid);
@@ -36,5 +35,5 @@ public class DBHandlerTest {
     public void rateIsValid() {
         boolean valid = DBHandler.isValidRate(-55.5);
         assertFalse(valid);
-    }*/
+    }
 }

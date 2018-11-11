@@ -68,7 +68,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param email email input field
      * @return boolean whether or not the email is valid format
      */
-    public boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) {
         char currentChar = ' ';
         int atIndex, dotIndex;
         String splitStringLocal, splitStringDomain, splitStringEnd;
@@ -282,7 +282,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param service service input
      * @return boolean whether or not the service name is valid
      */
-    public boolean isValidService(String service) {
+    public static boolean isValidService(String service) {
         for (int possibleService = 0; possibleService < Admin.SERVICES_OFFERED.length;
              possibleService++)
             if (service.equals(Admin.SERVICES_OFFERED[possibleService]))
@@ -297,7 +297,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param rate rate per hour of pay for service
      * @return boolean whether or not the rate is valid
      */
-    public boolean isValidRate(double rate) {
+    public static boolean isValidRate(double rate) {
         if (rate < 0)
             return false;
 
