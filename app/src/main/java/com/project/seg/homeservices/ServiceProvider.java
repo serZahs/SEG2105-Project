@@ -17,6 +17,10 @@ public class ServiceProvider extends User {
     private ArrayList<String> servicesProvided; // list of services provided
     private Admin admin;
 
+    private String address;
+    private String phoneNumber;
+    private String companyName;
+
     /**
      * constructor for service provider class. (no availability specified)
      *
@@ -136,4 +140,28 @@ public class ServiceProvider extends User {
      * @return ArrayList<String> an list of services provided
      */
     public ArrayList<String> getServices() { return servicesProvided;}
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
 }

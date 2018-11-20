@@ -21,6 +21,7 @@
         <activity android:name=".HomeOwnerMainActivity" />
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".RateServiceHour" />
+        <activity android:name=".ServiceProviderProfileActivity"></activity>
     </application>
 
 </manifest>
