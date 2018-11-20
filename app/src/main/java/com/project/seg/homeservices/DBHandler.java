@@ -30,7 +30,9 @@ public class DBHandler extends SQLiteOpenHelper {
             + "(" + COLUMN_EMAIL + " TEXT UNIQUE PRIMARY KEY,"
             + COLUMN_USERNAME + " TEXT UNIQUE,"
             + COLUMN_PASSWORD + " TEXT,"
-            + COLUMN_USER_TYPE + " TEXT)";
+            + COLUMN_USER_TYPE + " TEXT, "
+            + COLUMN_PHONENUMBER + "TEXT,"
+            + COLUMN_ADDRESS +"TEXT)";
 
     private static final String TABLE_SERVICES = "allServicesInfo";
 
