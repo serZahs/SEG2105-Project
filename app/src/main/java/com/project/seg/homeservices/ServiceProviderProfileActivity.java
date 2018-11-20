@@ -20,12 +20,13 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
         db = new DBHandler(this);
         email = getIntent().getStringExtra("emailField");
 
-        addressField = findViewById(R.id.addressField);
-        address = addressField.getText().toString();
-        addressField.setText(db.getAddress(email));
+        if (db.getAddress(email) != null)
+            addressField.setText(db.getAddress(email));
     }
 
     public void saveInfo (View view) {
+        addressField = findViewById(R.id.addressField);
+        address = addressField.getText().toString();
         db.updateAddress(email, address);
 
     }
