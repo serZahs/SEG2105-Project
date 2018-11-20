@@ -19,7 +19,7 @@ public class ServicesListCustomAdapter extends ArrayAdapter {
         this.rateHour=rateHour;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View  getView(int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.service_item_layout, parent, false);
