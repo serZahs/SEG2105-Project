@@ -18,6 +18,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_USERNAME = "USERNAME";
     private static final String COLUMN_PASSWORD = "PASSWORD";
     private static final String COLUMN_USER_TYPE = "USERTYPE";
+    private static final String COLUMN_ADDRESS = "ADDRESS";
 
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
@@ -27,7 +28,8 @@ public class DBHandler extends SQLiteOpenHelper {
             + "(" + COLUMN_EMAIL + " TEXT UNIQUE PRIMARY KEY,"
             + COLUMN_USERNAME + " TEXT UNIQUE,"
             + COLUMN_PASSWORD + " TEXT,"
-            + COLUMN_USER_TYPE + " TEXT)";
+            + COLUMN_USER_TYPE + " TEXT,"
+            + COLUMN_ADDRESS + " TEXT)";
 
     private static final String TABLE_SERVICES = "allServicesInfo";
 
@@ -265,6 +267,27 @@ public class DBHandler extends SQLiteOpenHelper {
      */
     public String getRole(String email) {
         String query = "SELECT USERTYPE FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+    }
+
+    public boolean updateAddress(String email, String address) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ADDRESS, address);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
+
+        db.update(TABLE_USERS, values, selection, selectionArgs);
+        return true;
+    }
+
+    public String getAddress(String email) {
+        String query = "SELECT ADDRESS FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor entryCursor = db.rawQuery(query, null);
 
