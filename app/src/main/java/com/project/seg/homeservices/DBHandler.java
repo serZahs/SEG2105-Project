@@ -18,6 +18,9 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_USERNAME = "USERNAME";
     private static final String COLUMN_PASSWORD = "PASSWORD";
     private static final String COLUMN_USER_TYPE = "USERTYPE";
+    private static final String COLUMN_PHONENUMBER = "PHONENUMBER";
+    private static final String COLUMN_ADDRESS = "ADDRESS";
+
 
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
@@ -233,6 +236,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_USERNAME, username);
         values.put(COLUMN_PASSWORD, password);
         values.put(COLUMN_USER_TYPE, type);
+
 
         db.insert(TABLE_USERS, null, values);
         db.close();

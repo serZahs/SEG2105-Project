@@ -11,13 +11,14 @@ import android.widget.TextView;
 public class ServiceProviderMainActivity extends AppCompatActivity {
 
     TextView username;
+    DBHandler db = new DBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_provider);
 
-        DBHandler db = new DBHandler(this);
+
         String email = getIntent().getStringExtra("emailField");
         final String[] serviceList = {"Walk Dog", "Do the Dishes", "Clean Room", "Make Bed", "Take Trash Out"};
         final String[] rateHour={"1","2","3","4","5"};
@@ -32,7 +33,6 @@ public class ServiceProviderMainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         { @Override
         public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-//Here we insert some code to do something!
 
             Intent editorLaunchInterest = new Intent(getApplicationContext(), RateServiceHour.class);
             editorLaunchInterest.putExtra("position",position);
