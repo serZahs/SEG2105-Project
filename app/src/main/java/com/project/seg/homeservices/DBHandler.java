@@ -412,4 +412,17 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(DATABASE_CREATE_SERVICE_TABLE);
         db.close();
     }
+
+    public String getAdminEmail() {
+
+        String type = "ADMIN";
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE USER_TYPE = \"" + type + "\"";
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+        return cursor.getString(0);
+
+
+    }
 }
