@@ -15,7 +15,9 @@ public class ServiceProvider extends User {
     private int sumRating; // sum of rating home owner has gotten (starts at 0)
     private boolean available; // state of avaiability of service provider
     private ArrayList<String> servicesProvided; // list of services provided
+    private boolean serviceLicense; //whether or not the service is licensed
     private Admin admin;
+
 
     private String address;
     private String phoneNumber;
@@ -134,12 +136,20 @@ public class ServiceProvider extends User {
         return false;
     }
 
+
+
     /**
      * Returns an arraylist of the services this service provider provides
      *
      * @return ArrayList<String> an list of services provided
      */
     public ArrayList<String> getServices() { return servicesProvided;}
+
+    /**
+     * Methods getters and setters for Service Provider
+     *
+     *
+     */
 
     public void setAddress(String address) {
         this.address = address;
@@ -164,4 +174,8 @@ public class ServiceProvider extends User {
     public String getCompanyName() {
         return companyName;
     }
+
+    public boolean Licensed() { return serviceLicense;}
+
+    public void setLicensed(boolean Licensed) {this.serviceLicense = Licensed;}
 }
