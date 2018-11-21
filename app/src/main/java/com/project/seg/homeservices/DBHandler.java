@@ -22,6 +22,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ADDRESS = "ADDRESS";
     private static final String COLUMN_PHONE_NUMBER = "PHONENUMBER";
     private static final String COLUMN_COMPANY_NAME = "COMPANYNAME";
+    private static final String COLUMN_LICENSED =  "LICENSED";
 
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
@@ -34,7 +35,9 @@ public class DBHandler extends SQLiteOpenHelper {
             + COLUMN_USER_TYPE    + " TEXT,"
             + COLUMN_ADDRESS      + " TEXT,"
             + COLUMN_PHONE_NUMBER + " TEXT,"
-            + COLUMN_COMPANY_NAME + " TEXT)";
+            + COLUMN_COMPANY_NAME + " TEXT,"
+            + COLUMN_LICENSED     + " TEXT")";
+
 
     private static final String TABLE_SERVICES = "allServicesInfo";
 
@@ -279,6 +282,31 @@ public class DBHandler extends SQLiteOpenHelper {
         entryCursor.moveToFirst();
 
         return entryCursor.getString(0);
+    }
+
+    public boolean setLicensed (String email, String licensed) {
+
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_LICENSED, licensed);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
+
+        sqlDB.update(TABLE_USERS, values, selection, selectionArgs);
+        sqlDB.close();
+        return true;
+
+    }
+
+    public String getLicensed (String email){
+        String query = "SELECT LICENSED FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+
     }
 
     public boolean setAddress(String email, String address) {
