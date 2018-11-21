@@ -49,6 +49,27 @@ public class DBHandler extends SQLiteOpenHelper {
             + " TEXT UNIQUE PRIMARY KEY,"
             + COLUMN_SERVICE_RATE + " DOUBLE)";
 
+    private static final String TABLE_AVAILABILITIES = "serviceProviderAvailabilities";
+
+    private static final String COLUMN_EMAIL_AVAILABILITY = "EMAIL";
+    private static final String COLUMN_MONDAY = "MONDAY";
+    private static final String COLUMN_TUESDAY = "TUESDAY";
+    private static final String COLUMN_WEDNESDAY = "WEDNESDAY";
+    private static final String COLUMN_THURSDAY = "THURSDAY";
+    private static final String COLUMN_FRIDAY = "FRIDAY";
+    private static final String COLUMN_SATURDAY = "SATURDAY";
+    private static final String COLUMN_SUNDAY = "SUNDAY";
+
+    private static final String DATABASE_CREATE_AVAILABILITIES_TABLE = "CREATE TABLE " + TABLE_AVAILABILITIES
+            + "(" + COLUMN_EMAIL_AVAILABILITY + " TEXT,"
+            +  COLUMN_MONDAY                + " TEXT,"
+            +  COLUMN_TUESDAY               + " TEXT,"
+            +  COLUMN_WEDNESDAY             + " TEXT,"
+            +  COLUMN_THURSDAY              + " TEXT,"
+            +  COLUMN_FRIDAY                + " TEXT,"
+            +  COLUMN_SATURDAY              + " TEXT,"
+            +  COLUMN_SUNDAY                + " TEXT)";
+
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -454,6 +475,81 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return true;
     }
+    /**
+     * Add an availability time.
+     *
+     * @param email email of the service provider
+     * @param day the day of the week
+     * @param starttime the start time of the availability
+     * @param endtime when the availability ends
+     */
+
+
+    public boolean addAvailabilitiesMonday(String email, String time){        
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_EMAIL_AVAILABILITY, email);
+        values.put(COLUMN_MONDAYS, time);
+
+        db.insert(TABLE_AVAILABILITIES, null, values);
+        db.close();
+
+        return true;
+    }
+
+    public boolean addAvailabilitiesMonday(String email, String time){        
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_EMAIL_AVAILABILITY, email);
+        values.put(COLUMN_MONDAYS, time);
+
+        db.insert(TABLE_AVAILABILITIES, null, values);
+        db.close();
+
+        return true;
+    }
+
+    public boolean addAvailabilitiesMonday(String email, String time){        
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_EMAIL_AVAILABILITY, email);
+        values.put(COLUMN_MONDAYS, time);
+
+        db.insert(TABLE_AVAILABILITIES, null, values);
+        db.close();
+
+        return true;
+    }
+
+    public boolean addAvailabilities(
+        String email, String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday){        
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_EMAIL_AVAILABILITY, email);
+        values.put(COLUMN_MONDAYS, monday);
+        values.put(COLUMN_TUESDAY, tuesday);
+        values.put(COLUMN_WEDNESDAY, wednesday);
+        values.put(COLUMN_THURSDAY, thursday);
+        values.put(COLUMN_FRIDAY, friday);
+        values.put(COLUMN_SATURDAY, saturday);
+        values.put(COLUMN_SUNDAY, sunday);
+
+
+        db.insert(TABLE_AVAILABILITIES, null, values);
+        db.close();
+
+        return true;
+    }
+
+
 
     /**
      * Attempts to remove the service from the list of services. IF it is present in the service database
