@@ -48,9 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 openAccountActivity = new Intent(getApplicationContext(), HomeOwnerMainActivity.class);
 
             if (type.equals(DBHandler.DATABASE_TYPE_SERVICE_PROVIDER))
-                openAccountActivity = new Intent(getApplicationContext(), ServiceProviderProfileActivity.class);
+                openAccountActivity = new Intent(getApplicationContext(), ServiceProviderMainActivity.class);
 
-            openAccountActivity.putExtra("emailField", email.getText().toString());
+            Bundle extras = new Bundle();
+            extras.putString("emailField", email.getText().toString());
+            extras.putString("passwordField",password.getText().toString());
+            openAccountActivity.putExtras(extras);
+
             startActivity(openAccountActivity);
         }
         else

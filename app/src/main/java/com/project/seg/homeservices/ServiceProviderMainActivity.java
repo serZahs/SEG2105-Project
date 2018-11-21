@@ -12,6 +12,9 @@ public class ServiceProviderMainActivity extends AppCompatActivity {
 
     TextView username;
     DBHandler db = new DBHandler(this);
+    Bundle extras = getIntent().getExtras();
+    String email = extras.getString("emailField");
+    String password = extras.getString("passwordField");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +22,11 @@ public class ServiceProviderMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_service_provider);
 
 
-        String email = getIntent().getStringExtra("emailField");
+
         final String[] serviceList = {"Walk Dog", "Do the Dishes", "Clean Room", "Make Bed", "Take Trash Out"};
         final String[] rateHour={"1","2","3","4","5"};
+
+
 
         username = findViewById(R.id.usernameDisplay);
 
