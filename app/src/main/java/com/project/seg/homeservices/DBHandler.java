@@ -19,15 +19,22 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_PASSWORD = "PASSWORD";
     private static final String COLUMN_USER_TYPE = "USERTYPE";
 
+    private static final String COLUMN_ADDRESS = "ADDRESS";
+    private static final String COLUMN_PHONE_NUMBER = "PHONENUMBER";
+    private static final String COLUMN_COMPANY_NAME = "COMPANYNAME";
+
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
     public static final String DATABASE_TYPE_SERVICE_PROVIDER = "SERVICEPROVIDER";
 
     private static final String DATABASE_CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USERS
-            + "(" + COLUMN_EMAIL + " TEXT UNIQUE PRIMARY KEY,"
-            + COLUMN_USERNAME + " TEXT UNIQUE,"
-            + COLUMN_PASSWORD + " TEXT,"
-            + COLUMN_USER_TYPE + " TEXT)";
+            + "(" + COLUMN_EMAIL  + " TEXT UNIQUE PRIMARY KEY,"
+            + COLUMN_USERNAME     + " TEXT UNIQUE,"
+            + COLUMN_PASSWORD     + " TEXT,"
+            + COLUMN_USER_TYPE    + " TEXT,"
+            + COLUMN_ADDRESS      + " TEXT,"
+            + COLUMN_PHONE_NUMBER + " TEXT,"
+            + COLUMN_COMPANY_NAME + " TEXT)";
 
     private static final String TABLE_SERVICES = "allServicesInfo";
 
@@ -234,6 +241,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_PASSWORD, password);
         values.put(COLUMN_USER_TYPE, type);
 
+
         db.insert(TABLE_USERS, null, values);
         db.close();
 
@@ -265,6 +273,72 @@ public class DBHandler extends SQLiteOpenHelper {
      */
     public String getRole(String email) {
         String query = "SELECT USERTYPE FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+    }
+
+    public boolean setAddress(String email, String address) {
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ADDRESS, address);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
+
+        sqlDB.update(TABLE_USERS, values, selection, selectionArgs);
+        sqlDB.close();
+        return true;
+    }
+
+    public String getAddress(String email) {
+        String query = "SELECT ADDRESS FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+    }
+
+    public boolean setPhoneNumber(String email, String phoneNumber) {
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PHONE_NUMBER, phoneNumber);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
+
+        sqlDB.update(TABLE_USERS, values, selection, selectionArgs);
+        sqlDB.close();
+        return true;
+    }
+
+    public String getPhoneNumber(String email) {
+        String query = "SELECT PHONENUMBER FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+    }
+
+    public boolean setCompanyName(String email, String companyName) {
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COMPANY_NAME, companyName);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
+
+        sqlDB.update(TABLE_USERS, values, selection, selectionArgs);
+        sqlDB.close();
+        return true;
+    }
+
+    public String getCompanyName(String email) {
+        String query = "SELECT COMPANYNAME FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor entryCursor = db.rawQuery(query, null);
 
