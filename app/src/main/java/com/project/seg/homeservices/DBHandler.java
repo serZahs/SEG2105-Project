@@ -36,7 +36,7 @@ public class DBHandler extends SQLiteOpenHelper {
             + COLUMN_ADDRESS      + " TEXT,"
             + COLUMN_PHONE_NUMBER + " TEXT,"
             + COLUMN_COMPANY_NAME + " TEXT,"
-            + COLUMN_LICENSED     + " TEXT")";
+            + COLUMN_LICENSED     + " TEXT)";
 
 
     private static final String TABLE_SERVICES = "allServicesInfo";
