@@ -16,15 +16,16 @@ public class AdminMainActivity extends AppCompatActivity {
     EditText servicename;
     EditText rate;
 
-    Bundle extras = getIntent().getExtras();
-    String email = extras.getString("emailField");
-    String password = extras.getString("passwordField");
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
+        Bundle extras = getIntent().getExtras();
+        String email = extras.getString("emailField");
+        String password = extras.getString("passwordField");
         username = findViewById(R.id.usernameDisplay);
         username.setText(db.getUsername(email));
         final Admin admin = new Admin(email,username.getText().toString(),password);
@@ -32,9 +33,11 @@ public class AdminMainActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.createServiceButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                servicename=(EditText)findViewById(R.id.serviceNameField);
-                rate = (EditText)findViewById(R.id.rateField);
-                admin.addService(servicename.getText().toString(), new Double(rate.getText().toString()));
+                servicename=findViewById(R.id.serviceNameField);
+                rate = findViewById(R.id.rateField);
+                db.addService(servicename.getText().toString(), new Double(rate.getText().toString()));
+                admin.addService(servicename.getText().toString(),new Double(rate.getText().toString()));
+
             }
         });
     }

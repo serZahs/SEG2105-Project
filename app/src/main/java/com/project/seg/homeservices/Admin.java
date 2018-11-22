@@ -10,6 +10,7 @@ package com.project.seg.homeservices;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
 public class Admin extends User {
 
     // specific attributes of admin to be decided.
@@ -21,6 +22,8 @@ public class Admin extends User {
             "Window Cleaning", "Electrical Mould Remediation",
             "Pest Control", "Junk Removal", "Handyman Services"};
     private ArrayList<Service> listOfServices;
+
+
     /**
      * constructor for admin class.
      *
@@ -84,6 +87,26 @@ public class Admin extends User {
         return false;
     }
 
+    public ArrayList<String> getListOfServicesInArrayList() {
+        ArrayList<String> listofService = new ArrayList<String>();
+
+        Iterator<Service> serviceIterator = listOfServices.iterator();
+
+        while (serviceIterator.hasNext()) {
+
+                listofService.add(serviceIterator.next().getService());
+
+        }
+
+        return listofService;
+    }
+
+    public ArrayList<Service> getListOfServices(){
+        return listOfServices;
+    }
+
+
+
     /**
      * Checks whether or not the input service is one of the services set as available by
      * the admin and returns whether or not it is.
@@ -95,9 +118,11 @@ public class Admin extends User {
         Iterator<Service> serviceIterator = listOfServices.iterator();
 
         while (serviceIterator.hasNext())
-            if (serviceIterator.next().equals(service))
+            if (serviceIterator.next().getService().equals(service))
                 return true;
 
         return false;
     }
+
+
 }

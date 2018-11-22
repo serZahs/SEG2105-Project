@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/welcome"
-        app:layout_constraintBottom_toTopOf="@+id/addServiceButton"
+        app:layout_constraintBottom_toTopOf="@+id/editProfileButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Service_Provider_Avatar" />

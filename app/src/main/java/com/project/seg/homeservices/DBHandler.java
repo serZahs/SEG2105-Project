@@ -8,6 +8,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Accounts.db";
@@ -503,6 +505,22 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(query);
         return true;
     }
+
+    public ArrayList<String> getService() {
+        ArrayList<String> services = new ArrayList<String>();
+        String query = "SELECT SERVICE FROM " + TABLE_SERVICES;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        while (cursor.moveToNext()) {
+
+            services.add(cursor.getString(0));
+        }
+
+        return services;
+
+    }
+
     // Function that clears databases contents. Used for testing
 
     public void deleteTables() {
@@ -518,13 +536,27 @@ public class DBHandler extends SQLiteOpenHelper {
     public String getAdminEmail() {
 
         String type = "ADMIN";
+        String query = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE USERTYPE = \"" + type + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE USER_TYPE = \"" + type + "\"";
         Cursor cursor = db.rawQuery(query, null);
 
         cursor.moveToFirst();
         return cursor.getString(0);
 
+
+    }
+
+
+
+
+    public String getPassword(String email){
+        String query = "SELECT PASSWORD FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
 
     }
 }

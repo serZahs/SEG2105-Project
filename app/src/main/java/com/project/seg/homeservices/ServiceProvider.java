@@ -8,6 +8,7 @@
 package com.project.seg.homeservices;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ServiceProvider extends User {
 
@@ -25,20 +26,19 @@ public class ServiceProvider extends User {
 
     /**
      * constructor for service provider class. (no availability specified)
-     *
-     * @param email email input field
+     *  @param email email input field
      * @param username username input field
-     * @param password password input field
      * @param admin admin of this service provider
      */
-    public ServiceProvider(String email, String username, String password, Admin admin) {
+    public ServiceProvider(String email, String username,String password, Admin admin) {
         super(email, username, password);
 
         sumRating = 0;
         numberOfRatings = 0;
         available = true; // by default, a service provider is available
         this.admin = admin;
-        servicesProvided = new ArrayList<String>();
+        servicesProvided = admin.getListOfServicesInArrayList();
+
     }
 
     /**
@@ -58,7 +58,7 @@ public class ServiceProvider extends User {
         numberOfRatings = 0;
         this.available = available;
         this.admin = admin;
-        servicesProvided = new ArrayList<String>();
+        servicesProvided = admin.getListOfServicesInArrayList();
     }
 
     /**
@@ -112,13 +112,20 @@ public class ServiceProvider extends User {
      * @param service service being added
      * @return boolean whether or not the service was added.
      */
-    public boolean addService(String service) {
+    public boolean editServiceRate(String service, double rate) {
         if (!admin.isAvailableService(service))
             return false;
+        Iterator<Service> serviceIterator = admin.getListOfServices().iterator();
 
-        servicesProvided.add(service);
+        while (serviceIterator.hasNext()) {
+            if (serviceIterator.next().getService().equals(service)) {
+               serviceIterator.next().setRate(rate);
+            }
+        }
+
         return true;
     }
+
 
     /**
      * Attempts to remove the input service from this service provider. If the service is present
@@ -128,12 +135,20 @@ public class ServiceProvider extends User {
      * @return boolean whether or not the service was removed.
      */
     public boolean removeService(String service) {
-        if (servicesProvided.contains(service)) {
-            servicesProvided.remove(service);
-            return true;
+        Iterator<String> serviceIterator = servicesProvided.iterator();
+
+        while (serviceIterator.hasNext()) {
+            if (serviceIterator.next().equals(service)) {
+                servicesProvided.remove(serviceIterator.next());
+            }
         }
 
         return false;
+    }
+
+    public boolean changeHourlyRate(String service,Double rate){
+
+        return true;
     }
 
 
@@ -143,7 +158,7 @@ public class ServiceProvider extends User {
      *
      * @return ArrayList<String> an list of services provided
      */
-    public ArrayList<String> getServices() { return servicesProvided;}
+    public ArrayList<String > getServices() { return servicesProvided;}
 
     /**
      * Methods getters and setters for Service Provider
@@ -174,6 +189,8 @@ public class ServiceProvider extends User {
     public String getCompanyName() {
         return companyName;
     }
+
+    public Admin getAdmin(){return admin;}
 
     public boolean Licensed() { return serviceLicense;}
 
