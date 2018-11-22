@@ -23,6 +23,14 @@ public class ServiceProvider extends User {
     private String address;
     private String phoneNumber;
     private String companyName;
+    private String mondayTime;
+    private String tuesdayTime;
+    private String wednesdayTime;
+    private String thursdayTime;
+    private String fridayTime;
+    private String saturdayTime;
+    private String sundayTime;
+    private ArrayList<String> availabilityTime;
 
     /**
      * constructor for service provider class. (no availability specified)
@@ -149,6 +157,21 @@ public class ServiceProvider extends User {
     public boolean changeHourlyRate(String service,Double rate){
 
         return true;
+    }
+
+
+    public boolean addAvailabilityTime(
+    	String mondayTime, String tuesdayTime, String wednesdayTime, String thursdayTime, 
+    	String fridayTime, String saturdayTime, String sundayTime) {
+
+    	this.mondayTime = mondayTime;
+    	this.tuesdayTime = tuesdayTime;
+    	this.wednesdayTime = wednesdayTime;
+    	this.thursdayTime = thursdayTime;
+    	this.fridayTime = fridayTime;
+    	this.saturdayTime = saturdayTime;
+    	this.sundayTime = sundayTime;
+
     }
 
 
