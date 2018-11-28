@@ -1,6 +1,5 @@
 package com.project.seg.homeservices;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,9 +33,20 @@ public class AdminMainActivity extends AppCompatActivity {
         final Admin admin = new Admin(email,username.getText().toString(),password);
 
         updateServicesList();
+
+
+        setContentView(R.layout.activity_admin_main);
+        final Button button = findViewById(R.id.createServiceButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                createService(this);
+
+            }
+        });
     }
 
-    public void createService (View view) {
+    public void createService (View.OnClickListener view) {
         servicename=findViewById(R.id.serviceNameField);
         rate = findViewById(R.id.rateField);
         db.addService(servicename.getText().toString(), new Double(rate.getText().toString()));
@@ -60,5 +70,7 @@ public class AdminMainActivity extends AppCompatActivity {
         ListView list = findViewById(R.id.servicesList);
         list.setAdapter(cursorAdapter);
     }
+
+
 
 }
