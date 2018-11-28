@@ -33,17 +33,6 @@ public class AdminMainActivity extends AppCompatActivity {
         final Admin admin = new Admin(email,username.getText().toString(),password);
 
         updateServicesList();
-
-
-        setContentView(R.layout.activity_admin_main);
-        final Button button = findViewById(R.id.createServiceButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                createService(this);
-
-            }
-        });
     }
 
     public void createService (View.OnClickListener view) {
@@ -70,7 +59,5 @@ public class AdminMainActivity extends AppCompatActivity {
         ListView list = findViewById(R.id.servicesList);
         list.setAdapter(cursorAdapter);
     }
-
-
 
 }
