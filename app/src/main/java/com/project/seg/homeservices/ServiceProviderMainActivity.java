@@ -37,7 +37,7 @@ public class ServiceProviderMainActivity extends AppCompatActivity {
         serviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedService = ((TextView) view).getText().toString();
+                selectedService = ((TextView)view.findViewById(R.id.serviceName)).getText().toString();
             }
         });
 
@@ -51,7 +51,7 @@ public class ServiceProviderMainActivity extends AppCompatActivity {
     }
 
     public void addServiceToProfile(View view) {
-        if (selectedService != null) {
+        if (selectedService != null && selectedService != "") {
             db.assignSerivce(email, selectedService);
         }
     }

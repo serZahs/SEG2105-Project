@@ -1,10 +1,14 @@
 package com.project.seg.homeservices;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 public class ServiceProviderProfileActivity extends AppCompatActivity {
 
@@ -16,6 +20,8 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
     String phoneNumber;
     String companyName;
     DBHandler db;
+    ListView serviceList;
+    String[] listOfAssignedServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,13 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
         companyName = db.getCompanyName(email);
         if (companyName != null)
             companyField.setText(companyName);
+
+        serviceList = findViewById(R.id.svList);
+        String assignedServices = db.getServicesAssigned(email);
+        if (assignedServices != null && assignedServices != "") {
+            listOfAssignedServices = assignedServices.split(",");
+            updateServicesList();
+        }
     }
 
     public void saveInfo (View view) {
@@ -57,5 +70,15 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
             intent.putExtra("emailField", email);
             startActivity(intent);
         }
+    }
+
+    private void updateServicesList() {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                R.layout.simple_service_item_layout,
+                R.id.simpleServiceName,
+                listOfAssignedServices
+        );
+        serviceList.setAdapter(arrayAdapter);
     }
 }

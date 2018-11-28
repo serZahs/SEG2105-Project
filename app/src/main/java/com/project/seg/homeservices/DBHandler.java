@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "Accounts.db";
 
     private static final String TABLE_USERS = "allAccountsInfo";
@@ -39,7 +39,8 @@ public class DBHandler extends SQLiteOpenHelper {
             + COLUMN_ADDRESS      + " TEXT,"
             + COLUMN_PHONE_NUMBER + " TEXT,"
             + COLUMN_COMPANY_NAME + " TEXT,"
-            + COLUMN_LICENSED     + " TEXT)";
+            + COLUMN_LICENSED     + " TEXT,"
+            + COLUMN_SERVICES_ASSIGNED + " TEXT)";
 
 
     private static final String TABLE_SERVICES = "allServicesInfo";
@@ -450,10 +451,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @return boolean whether or not the rate is valid
      */
     public boolean isValidRate(double rate) {
-        if (rate < 0)
-            return false;
-
-        return true;
+        return rate > 0;
     }
 
     /**
@@ -486,7 +484,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @return boolean whether or not the service was added
      */
     public boolean addService(String service, double rate) {
-        if (!isValidService(service))
+        if (!isValidRate(rate))
             return false;
 
         if (!checkServiceAdded(service))
