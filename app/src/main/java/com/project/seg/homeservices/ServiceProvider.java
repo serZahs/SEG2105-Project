@@ -172,6 +172,8 @@ public class ServiceProvider extends User {
     	this.saturdayTime = saturdayTime;
     	this.sundayTime = sundayTime;
 
+    	return true;
+
     }
 
 

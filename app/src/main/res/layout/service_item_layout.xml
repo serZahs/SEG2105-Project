@@ -9,17 +9,24 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/serviceNameTextView"
-            android:layout_width="264dp"
-            android:layout_height="37dp"
+            android:id="@+id/serviceID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/servicename" />
+            android:text="id" />
 
         <TextView
-            android:id="@+id/serviceRate_HourView"
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
+            android:id="@+id/serviceName"
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/rate_hour" />
+            android:text="Service " />
+
+        <TextView
+            android:id="@+id/serviceRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Rate/hr" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

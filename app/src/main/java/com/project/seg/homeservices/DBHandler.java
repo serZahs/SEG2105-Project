@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Accounts.db";
 
     private static final String TABLE_USERS = "allAccountsInfo";
@@ -25,6 +25,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_PHONE_NUMBER = "PHONENUMBER";
     private static final String COLUMN_COMPANY_NAME = "COMPANYNAME";
     private static final String COLUMN_LICENSED =  "LICENSED";
+    private static final String COLUMN_SERVICES_ASSIGNED = "ASSIGNEDSERVICES";
 
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
@@ -43,12 +44,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String TABLE_SERVICES = "allServicesInfo";
 
-    private static final String COLUMN_SERVICE_NAME = "SERVICE";
-    private static final String COLUMN_SERVICE_RATE = "RATE";
+    public static final String COLUMN_SERVICE_ID = "_id";
+    public static final String COLUMN_SERVICE_NAME = "SERVICE";
+    public static final String COLUMN_SERVICE_RATE = "RATE";
 
     private static final String DATABASE_CREATE_SERVICE_TABLE = "CREATE TABLE " + TABLE_SERVICES
-            + "(" + COLUMN_SERVICE_NAME
-            + " TEXT UNIQUE PRIMARY KEY,"
+            + "(" + COLUMN_SERVICE_ID     + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_SERVICE_NAME + " TEXT UNIQUE,"
             + COLUMN_SERVICE_RATE + " DOUBLE)";
 
     private static final String TABLE_AVAILABILITIES = "serviceProviderAvailabilities";
@@ -398,6 +400,30 @@ public class DBHandler extends SQLiteOpenHelper {
         return entryCursor.getString(0);
     }
 
+    public String getServicesAssigned(String email) {
+        String query = "SELECT ASSIGNEDSERVICES FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+    }
+
+    public boolean assignSerivce(String email, String service) {
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String originalVal = getServicesAssigned(email);
+        values.put(COLUMN_SERVICES_ASSIGNED, originalVal + "," + service);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
+
+        sqlDB.update(TABLE_USERS, values, selection, selectionArgs);
+        sqlDB.close();
+        return true;
+    }
+
     // Functions pertaining to the services database
 
     /**
@@ -440,7 +466,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public boolean checkServiceAdded(String service) {
         SQLiteDatabase db = this.getReadableDatabase();
         // query to check if the service is already added
-        String serviceCheck = "SELECT SERVICE FROM " + COLUMN_SERVICE_NAME + " WHERE SERVICE = \""
+        String serviceCheck = "SELECT SERVICE FROM " + TABLE_SERVICES + " WHERE SERVICE = \""
                 + service + "\"";
         Cursor checkCursor = db.rawQuery(serviceCheck, null);
 
@@ -477,6 +503,17 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return true;
     }
+
+    public Cursor getServicesTable() {
+        String query = "SELECT * FROM " + TABLE_SERVICES;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor;
+    }
+
     /**
      * Add an availability time.
      *
@@ -485,43 +522,13 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param starttime the start time of the availability
      * @param endtime when the availability ends
      */
-
-
     public boolean addAvailabilitiesMonday(String email, String time){        
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(COLUMN_EMAIL_AVAILABILITY, email);
-        values.put(COLUMN_MONDAYS, time);
-
-        db.insert(TABLE_AVAILABILITIES, null, values);
-        db.close();
-
-        return true;
-    }
-
-    public boolean addAvailabilitiesMonday(String email, String time){        
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(COLUMN_EMAIL_AVAILABILITY, email);
-        values.put(COLUMN_MONDAYS, time);
-
-        db.insert(TABLE_AVAILABILITIES, null, values);
-        db.close();
-
-        return true;
-    }
-
-    public boolean addAvailabilitiesMonday(String email, String time){        
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(COLUMN_EMAIL_AVAILABILITY, email);
-        values.put(COLUMN_MONDAYS, time);
+        values.put(COLUMN_MONDAY, time);
 
         db.insert(TABLE_AVAILABILITIES, null, values);
         db.close();
@@ -536,7 +543,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(COLUMN_EMAIL_AVAILABILITY, email);
-        values.put(COLUMN_MONDAYS, monday);
+        values.put(COLUMN_MONDAY, monday);
         values.put(COLUMN_TUESDAY, tuesday);
         values.put(COLUMN_WEDNESDAY, wednesday);
         values.put(COLUMN_THURSDAY, thursday);

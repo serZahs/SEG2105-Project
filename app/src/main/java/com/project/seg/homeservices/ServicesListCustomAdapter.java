@@ -8,18 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class ServicesListCustomAdapter extends ArrayAdapter {
-    private final Context context;
+
+    private Context mContext;
+
     private final String[] myServices;
     private final String[] rateHour;
 
-    public ServicesListCustomAdapter(Context context, String[] choreList,String[] rateHour)
-    { super(context, R.layout.service_item_layout, choreList);
-        this.context = context;
+    public ServicesListCustomAdapter(Context context, String[] choreList,String[] rateHour) {
+        super(context, R.layout.service_item_layout, choreList);
+        mContext = context;
         this.myServices = choreList;
         this.rateHour=rateHour;
     }
 
-    public View  getView(int position, View convertView, ViewGroup parent) {
+    /*public View  getView(int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.service_item_layout, parent, false);
@@ -31,5 +33,5 @@ public class ServicesListCustomAdapter extends ArrayAdapter {
 
         return rowView;
 
-    }
+    }*/
 }

@@ -5,84 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/back_ground"
-    tools:context=".ServiceProvider">
+    tools:context=".ServiceProviderMainActivity">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/mainLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/Service_Provider_Avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:contentDescription="@string/todo"
-            android:src="@mipmap/ic_launcher"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/usernameDisplay"
+            android:id="@+id/welcomeMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/username"
-            app:layout_constraintBottom_toTopOf="@+id/editProfileButton"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Service_Provider_Avatar" />
+            android:layout_gravity="center_horizontal"
+            android:text="TextView" />
 
-        <TextView
-            android:id="@+id/typeAccountDisplay"
+        <Button
+            android:id="@+id/editProfilebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/tap_to_edit"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/serviceList" />
+            android:layout_gravity="center_horizontal"
+            android:onClick="editProfile"
+            android:text="Edit Profile" />
+
+        <Button
+            android:id="@+id/assignServiceBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="addServiceToProfile"
+            android:text="Add to Profile" />
 
         <ListView
-            android:id="@+id/serviceList"
+            android:id="@+id/listOfServices"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="60dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="180dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginRight="60dp"
-            android:layout_marginBottom="80dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editProfileButton" />
+            android:layout_height="match_parent" />
 
-        <Button
-            android:id="@+id/editProfileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/edit_profile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usernameDisplay" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/changeAvalability"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
