@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -22,6 +24,7 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
     DBHandler db;
     ListView serviceList;
     String[] listOfAssignedServices;
+    CheckBox mon, tue, wed, thu, fri, sat, sun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,90 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
         companyName = db.getCompanyName(email);
         if (companyName != null)
             companyField.setText(companyName);
+
+        /* Checkbox related code */
+
+        mon = findViewById(R.id.cb0);
+        tue = findViewById(R.id.cb1);
+        wed = findViewById(R.id.cb2);
+        thu = findViewById(R.id.cb3);
+        fri = findViewById(R.id.cb4);
+        sat = findViewById(R.id.cb5);
+        sun = findViewById(R.id.cb6);
+
+        mon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked())
+                    db.updateAvailabilities(email, DBHandler.COLUMN_MONDAY, "true");
+                else
+                    db.updateAvailabilities(email, DBHandler.COLUMN_MONDAY, "false");
+            }
+        });
+
+        tue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked())
+                    db.updateAvailabilities(email, DBHandler.COLUMN_TUESDAY, "true");
+                else
+                    db.updateAvailabilities(email, DBHandler.COLUMN_TUESDAY, "false");
+            }
+        });
+
+        wed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked())
+                    db.updateAvailabilities(email, DBHandler.COLUMN_WEDNESDAY, "true");
+                else
+                    db.updateAvailabilities(email, DBHandler.COLUMN_WEDNESDAY, "false");
+            }
+        });
+
+        thu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked())
+                    db.updateAvailabilities(email, DBHandler.COLUMN_THURSDAY, "true");
+                else
+                    db.updateAvailabilities(email, DBHandler.COLUMN_THURSDAY, "false");
+            }
+        });
+
+        fri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked())
+                    db.updateAvailabilities(email, DBHandler.COLUMN_FRIDAY, "true");
+                else
+                    db.updateAvailabilities(email, DBHandler.COLUMN_FRIDAY, "false");
+            }
+        });
+
+        sat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked())
+                    db.updateAvailabilities(email, DBHandler.COLUMN_SATURDAY, "true");
+                else
+                    db.updateAvailabilities(email, DBHandler.COLUMN_SATURDAY, "false");
+            }
+        });
+
+        sun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (sun.isChecked())
+                    db.updateAvailabilities(email, DBHandler.COLUMN_SUNDAY, "true");
+                else
+                    db.updateAvailabilities(email, DBHandler.COLUMN_SUNDAY, "false");
+            }
+        });
+
+        updateAvailabilityCheckboxes();
+
+        /* Service list related code */
 
         serviceList = findViewById(R.id.svList);
         String assignedServices = db.getServicesAssigned(email);
@@ -80,5 +167,28 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
                 listOfAssignedServices
         );
         serviceList.setAdapter(arrayAdapter);
+    }
+
+    private void updateAvailabilityCheckboxes() {
+        String monVal = db.getAvailabilities(email, DBHandler.COLUMN_MONDAY);
+        mon.setChecked(Boolean.parseBoolean(monVal));
+
+        String tueVal = db.getAvailabilities(email, DBHandler.COLUMN_TUESDAY);
+        tue.setChecked(Boolean.parseBoolean(tueVal));
+
+        String wedVal = db.getAvailabilities(email, DBHandler.COLUMN_WEDNESDAY);
+        wed.setChecked(Boolean.parseBoolean(wedVal));
+
+        String thuVal = db.getAvailabilities(email, DBHandler.COLUMN_THURSDAY);
+        thu.setChecked(Boolean.parseBoolean(thuVal));
+
+        String friVal = db.getAvailabilities(email, DBHandler.COLUMN_FRIDAY);
+        fri.setChecked(Boolean.parseBoolean(friVal));
+
+        String satVal = db.getAvailabilities(email, DBHandler.COLUMN_SATURDAY);
+        sat.setChecked(Boolean.parseBoolean(satVal));
+
+        String sunVal = db.getAvailabilities(email, DBHandler.COLUMN_SUNDAY);
+        sun.setChecked(Boolean.parseBoolean(sunVal));
     }
 }

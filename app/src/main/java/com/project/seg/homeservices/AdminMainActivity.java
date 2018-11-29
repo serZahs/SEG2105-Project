@@ -35,7 +35,7 @@ public class AdminMainActivity extends AppCompatActivity {
         updateServicesList();
     }
 
-    public void createService (View.OnClickListener view) {
+    public void createService(View view) {
         servicename=findViewById(R.id.serviceNameField);
         rate = findViewById(R.id.rateField);
         db.addService(servicename.getText().toString(), new Double(rate.getText().toString()));

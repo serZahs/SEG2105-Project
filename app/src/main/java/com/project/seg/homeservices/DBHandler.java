@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "Accounts.db";
 
     private static final String TABLE_USERS = "allAccountsInfo";
@@ -43,6 +43,7 @@ public class DBHandler extends SQLiteOpenHelper {
             + COLUMN_SERVICES_ASSIGNED + " TEXT)";
 
 
+
     private static final String TABLE_SERVICES = "allServicesInfo";
 
     public static final String COLUMN_SERVICE_ID = "_id";
@@ -54,19 +55,20 @@ public class DBHandler extends SQLiteOpenHelper {
             + COLUMN_SERVICE_NAME + " TEXT UNIQUE,"
             + COLUMN_SERVICE_RATE + " DOUBLE)";
 
+
+
     private static final String TABLE_AVAILABILITIES = "serviceProviderAvailabilities";
 
-    private static final String COLUMN_EMAIL_AVAILABILITY = "EMAIL";
-    private static final String COLUMN_MONDAY = "MONDAY";
-    private static final String COLUMN_TUESDAY = "TUESDAY";
-    private static final String COLUMN_WEDNESDAY = "WEDNESDAY";
-    private static final String COLUMN_THURSDAY = "THURSDAY";
-    private static final String COLUMN_FRIDAY = "FRIDAY";
-    private static final String COLUMN_SATURDAY = "SATURDAY";
-    private static final String COLUMN_SUNDAY = "SUNDAY";
+    public static final String COLUMN_MONDAY = "MONDAY";
+    public static final String COLUMN_TUESDAY = "TUESDAY";
+    public static final String COLUMN_WEDNESDAY = "WEDNESDAY";
+    public static final String COLUMN_THURSDAY = "THURSDAY";
+    public static final String COLUMN_FRIDAY = "FRIDAY";
+    public static final String COLUMN_SATURDAY = "SATURDAY";
+    public static final String COLUMN_SUNDAY = "SUNDAY";
 
     private static final String DATABASE_CREATE_AVAILABILITIES_TABLE = "CREATE TABLE " + TABLE_AVAILABILITIES
-            + "(" + COLUMN_EMAIL_AVAILABILITY + " TEXT,"
+            + "(" + COLUMN_EMAIL + " TEXT UNIQUE PRIMARY KEY,"
             +  COLUMN_MONDAY                + " TEXT,"
             +  COLUMN_TUESDAY               + " TEXT,"
             +  COLUMN_WEDNESDAY             + " TEXT,"
@@ -84,6 +86,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_USER_TABLE);
         db.execSQL(DATABASE_CREATE_SERVICE_TABLE);
+        db.execSQL(DATABASE_CREATE_AVAILABILITIES_TABLE);
     }
 
     @Override
@@ -91,6 +94,7 @@ public class DBHandler extends SQLiteOpenHelper {
                           int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_AVAILABILITIES);
         onCreate(db);
     }
 
@@ -272,6 +276,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
         db.insert(TABLE_USERS, null, values);
+
+        if (type.equals(DATABASE_TYPE_SERVICE_PROVIDER)) {
+            ContentValues availability_values = new ContentValues();
+            availability_values.put(COLUMN_EMAIL, email);
+
+            db.insert(TABLE_AVAILABILITIES, null, availability_values);
+        }
         db.close();
 
         return true;
@@ -520,7 +531,7 @@ public class DBHandler extends SQLiteOpenHelper {
      * @param starttime the start time of the availability
      * @param endtime when the availability ends
      */
-    public boolean addAvailabilitiesMonday(String email, String time){        
+    /*public boolean addAvailabilitiesMonday(String email, String time){
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -532,31 +543,39 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         return true;
-    }
+    }*/
 
-    public boolean addAvailabilities(
-        String email, String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday){        
-
-        SQLiteDatabase db = this.getWritableDatabase();
+    /**
+     *
+     * @param email
+     * @param day
+     * @param val represents the availability (0 - unavailable, 1 - available)
+     * @return
+     */
+    public boolean updateAvailabilities(String email, String day, String val) {
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(day, val);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
 
-        values.put(COLUMN_EMAIL_AVAILABILITY, email);
-        values.put(COLUMN_MONDAY, monday);
-        values.put(COLUMN_TUESDAY, tuesday);
-        values.put(COLUMN_WEDNESDAY, wednesday);
-        values.put(COLUMN_THURSDAY, thursday);
-        values.put(COLUMN_FRIDAY, friday);
-        values.put(COLUMN_SATURDAY, saturday);
-        values.put(COLUMN_SUNDAY, sunday);
-
-
-        db.insert(TABLE_AVAILABILITIES, null, values);
-        db.close();
-
+        sqlDB.update(TABLE_AVAILABILITIES, values, selection, selectionArgs);
+        sqlDB.close();
         return true;
     }
 
+    public String getAvailabilities(String email, String day) {
+        String query = "SELECT " + day + " FROM " + TABLE_AVAILABILITIES
+                + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
 
+        if (entryCursor != null & entryCursor.getCount() > 0) {
+            entryCursor.moveToFirst();
+            return entryCursor.getString(0);
+        } else
+            return "false";
+    }
 
     /**
      * Attempts to remove the service from the list of services. IF it is present in the service database
@@ -629,8 +648,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_AVAILABILITIES);
         db.execSQL(DATABASE_CREATE_USER_TABLE);
         db.execSQL(DATABASE_CREATE_SERVICE_TABLE);
+        db.execSQL(DATABASE_CREATE_AVAILABILITIES_TABLE);
         db.close();
     }
 
