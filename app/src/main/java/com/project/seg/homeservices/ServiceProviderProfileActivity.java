@@ -134,11 +134,7 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
         /* Service list related code */
 
         serviceList = findViewById(R.id.svList);
-        String assignedServices = db.getServicesAssigned(email);
-        if (assignedServices != null && assignedServices != "") {
-            listOfAssignedServices = assignedServices.split(",");
-            updateServicesList();
-        }
+        updateServicesList();
     }
 
     public void saveInfo (View view) {
@@ -160,13 +156,18 @@ public class ServiceProviderProfileActivity extends AppCompatActivity {
     }
 
     private void updateServicesList() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.simple_service_item_layout,
-                R.id.simpleServiceName,
-                listOfAssignedServices
-        );
-        serviceList.setAdapter(arrayAdapter);
+        Cursor cursor = db.getServicesTable(email);
+        String[] projections = new String[] {db.COLUMN_ID, db.COLUMN_SERVICE_NAME, db.COLUMN_SERVICE_RATE};
+        int[] cols = new int[] {R.id.serviceID, R.id.serviceName, R.id.serviceRate};
+        SimpleCursorAdapter cursorAdapter;
+        cursorAdapter = new SimpleCursorAdapter(
+                getBaseContext(),
+                R.layout.service_item_layout,
+                cursor,
+                projections,
+                cols,
+                0);
+        serviceList.setAdapter(cursorAdapter);
     }
 
     private void updateAvailabilityCheckboxes() {

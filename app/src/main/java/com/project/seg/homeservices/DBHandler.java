@@ -11,13 +11,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "Accounts.db";
 
     private static final String TABLE_USERS = "allAccountsInfo";
 
+    public static final String COLUMN_ID = "_id";
     private static final String COLUMN_EMAIL = "EMAIL";
-    private static final String COLUMN_USERNAME = "USERNAME";
+    public static final String COLUMN_USERNAME = "USERNAME";
     private static final String COLUMN_PASSWORD = "PASSWORD";
     private static final String COLUMN_USER_TYPE = "USERTYPE";
 
@@ -25,14 +26,15 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_PHONE_NUMBER = "PHONENUMBER";
     private static final String COLUMN_COMPANY_NAME = "COMPANYNAME";
     private static final String COLUMN_LICENSED =  "LICENSED";
-    private static final String COLUMN_SERVICES_ASSIGNED = "ASSIGNEDSERVICES";
+    public static final String COLUMN_SERVICES_ASSIGNED = "ASSIGNEDSERVICES";
 
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
     public static final String DATABASE_TYPE_SERVICE_PROVIDER = "SERVICEPROVIDER";
 
     private static final String DATABASE_CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USERS
-            + "(" + COLUMN_EMAIL  + " TEXT UNIQUE PRIMARY KEY,"
+            + "(" + COLUMN_ID     + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_EMAIL        + " TEXT UNIQUE,"
             + COLUMN_USERNAME     + " TEXT UNIQUE,"
             + COLUMN_PASSWORD     + " TEXT,"
             + COLUMN_USER_TYPE    + " TEXT,"
@@ -46,12 +48,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String TABLE_SERVICES = "allServicesInfo";
 
-    public static final String COLUMN_SERVICE_ID = "_id";
     public static final String COLUMN_SERVICE_NAME = "SERVICE";
     public static final String COLUMN_SERVICE_RATE = "RATE";
 
     private static final String DATABASE_CREATE_SERVICE_TABLE = "CREATE TABLE " + TABLE_SERVICES
-            + "(" + COLUMN_SERVICE_ID     + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "(" + COLUMN_ID     + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_SERVICE_NAME + " TEXT UNIQUE,"
             + COLUMN_SERVICE_RATE + " DOUBLE)";
 
@@ -412,6 +413,21 @@ public class DBHandler extends SQLiteOpenHelper {
         return entryCursor.getString(0);
     }
 
+
+
+    public Cursor getServiceProviderInfo() {
+        String query = "SELECT _id, USERNAME, ASSIGNEDSERVICES FROM " + TABLE_USERS
+                + " WHERE USERTYPE = \"" + DATABASE_TYPE_SERVICE_PROVIDER + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor;
+    }
+
+    // Functions pertaining to the services database
+
     public String getServicesAssigned(String email) {
         String query = "SELECT ASSIGNEDSERVICES FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -427,7 +443,10 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         String originalVal = getServicesAssigned(email);
-        values.put(COLUMN_SERVICES_ASSIGNED, originalVal + "," + service);
+        if (originalVal == null)
+            values.put(COLUMN_SERVICES_ASSIGNED, service);
+        else
+            values.put(COLUMN_SERVICES_ASSIGNED, originalVal + "," + service);
         String selection = COLUMN_EMAIL + "=?";
         String[] selectionArgs = {email};
 
@@ -435,8 +454,6 @@ public class DBHandler extends SQLiteOpenHelper {
         sqlDB.close();
         return true;
     }
-
-    // Functions pertaining to the services database
 
     /**
      * Checks if the service input is valid. (not sure how to implement choosing yet).
@@ -521,6 +538,34 @@ public class DBHandler extends SQLiteOpenHelper {
         entryCursor.moveToFirst();
 
         return entryCursor;
+    }
+
+    public Cursor getServicesTable(String email) {
+        if (getServicesAssigned(email) != null) {
+            String[] servicesAssigned = getServicesAssigned(email).split(",");
+            boolean first = true;
+            String INClause = "(";
+
+            for (String s : servicesAssigned) {
+                if (first)
+                    first = false;
+                else
+                    INClause += ",";
+
+                INClause += "'" + s + "'";
+            }
+            INClause += ")";
+
+            String query = "SELECT * FROM " + TABLE_SERVICES + " WHERE SERVICE IN " + INClause;
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor entryCursor = db.rawQuery(query, null);
+
+            entryCursor.moveToFirst();
+
+            return entryCursor;
+        } else {
+            return getServicesTable();
+        }
     }
 
     /**

@@ -46,7 +46,7 @@ public class AdminMainActivity extends AppCompatActivity {
 
     private void updateServicesList() {
         Cursor cursor = db.getServicesTable();
-        String[] projections = new String[] {db.COLUMN_SERVICE_ID, db.COLUMN_SERVICE_NAME, db.COLUMN_SERVICE_RATE};
+        String[] projections = new String[] {db.COLUMN_ID, db.COLUMN_SERVICE_NAME, db.COLUMN_SERVICE_RATE};
         int[] cols = new int[] {R.id.serviceID, R.id.serviceName, R.id.serviceRate};
         SimpleCursorAdapter cursorAdapter;
         cursorAdapter = new SimpleCursorAdapter(
