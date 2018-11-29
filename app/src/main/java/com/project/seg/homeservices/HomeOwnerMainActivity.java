@@ -25,7 +25,7 @@ public class HomeOwnerMainActivity extends AppCompatActivity {
         String email = getIntent().getStringExtra("emailField");
         username = findViewById(R.id.usernameDisplay);
 
-        //username.setText(username.getText() + db.getUsername(email));
+        username.setText(username.getText() + db.getUsername(email));
 
         Cursor usernameCursor = db.getServiceProviderInfo();
         listOfServiceProviders = findViewById(R.id.spList);

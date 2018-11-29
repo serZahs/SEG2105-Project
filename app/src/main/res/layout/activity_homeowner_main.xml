@@ -10,6 +10,7 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/back_ground"
         android:orientation="vertical">
 
         <LinearLayout
@@ -22,30 +23,17 @@
                 android:id="@+id/usernameDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
                 android:layout_weight="1"
-                android:text="username: " />
+                android:text="Welcome:" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/accountTypeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/typeAccountDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="account type: HOMEOWNER" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/spList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
