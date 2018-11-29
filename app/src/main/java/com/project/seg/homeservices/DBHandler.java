@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "Accounts.db";
 
     private static final String TABLE_USERS = "allAccountsInfo";
@@ -27,6 +27,8 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_COMPANY_NAME = "COMPANYNAME";
     private static final String COLUMN_LICENSED =  "LICENSED";
     public static final String COLUMN_SERVICES_ASSIGNED = "ASSIGNEDSERVICES";
+    public static final String COLUMN_RATING = "RATING";
+    public static final String COLUMN_RATING_AMOUNT = "RATINGAMOUNT";
 
     public static final String DATABASE_TYPE_ADMIN = "ADMIN";
     public static final String DATABASE_TYPE_HOME_OWNER = "HOMEOWNER";
@@ -42,7 +44,9 @@ public class DBHandler extends SQLiteOpenHelper {
             + COLUMN_PHONE_NUMBER + " TEXT,"
             + COLUMN_COMPANY_NAME + " TEXT,"
             + COLUMN_LICENSED     + " TEXT,"
-            + COLUMN_SERVICES_ASSIGNED + " TEXT)";
+            + COLUMN_SERVICES_ASSIGNED + " TEXT,"
+            + COLUMN_RATING            + " DOUBLE,"
+            + COLUMN_RATING_AMOUNT     + " INTEGER)";
 
 
 
@@ -305,6 +309,16 @@ public class DBHandler extends SQLiteOpenHelper {
         return entryCursor.getString(0);
     }
 
+    public String getEmail(String userName) {
+        String query = "SELECT EMAIL FROM " + TABLE_USERS + " WHERE USERNAME = \"" + userName + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+    }
+
     /**
      * returns the type of account corresponding to an email
      * note: does not check the validity of the email
@@ -424,6 +438,60 @@ public class DBHandler extends SQLiteOpenHelper {
         entryCursor.moveToFirst();
 
         return entryCursor;
+    }
+
+    public int getAmountRatings(String email) {
+        String query = "SELECT " + COLUMN_RATING_AMOUNT + " FROM " + TABLE_USERS
+                + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getInt(0);
+    }
+
+    public boolean setAmountRatings(String email, int amount) {
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_RATING_AMOUNT, amount);
+        String selection = COLUMN_EMAIL + "=?";
+        String[] selectionArgs = {email};
+
+        sqlDB.update(TABLE_USERS, values, selection, selectionArgs);
+        sqlDB.close();
+        return true;
+    }
+
+    public float getRating(String email) {
+        String query = "SELECT RATING FROM " + TABLE_USERS + " WHERE EMAIL = \"" + email + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getFloat(0);
+    }
+
+    public boolean addRating (String email, float rating) {
+        ContentValues values = new ContentValues();
+        String selection;
+
+        setAmountRatings(email, getAmountRatings(email)+1);
+        if (getAmountRatings(email) == 1) {
+            values.put(COLUMN_RATING, rating);
+            selection = COLUMN_EMAIL + "=?";
+        } else {
+            float newRating = (getRating(email) + rating) / getAmountRatings(email);
+            values.put(COLUMN_RATING, newRating);
+            selection = COLUMN_EMAIL + "=?";
+        }
+        String[] selectionArgs = {email};
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+
+        sqlDB.update(TABLE_USERS, values, selection, selectionArgs);
+        sqlDB.close();
+        return true;
     }
 
     // Functions pertaining to the services database
@@ -620,6 +688,10 @@ public class DBHandler extends SQLiteOpenHelper {
             return entryCursor.getString(0);
         } else
             return "false";
+    }
+
+    public String getAvailabilities(String email) {
+        return "";
     }
 
     /**

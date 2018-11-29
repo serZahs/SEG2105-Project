@@ -12,6 +12,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/spSignOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="signOut"
+            android:text="Sign Out" />
+
         <LinearLayout
             android:id="@+id/userDisplayLayout"
             android:layout_width="match_parent"
