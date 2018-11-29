@@ -415,6 +415,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
+
     public Cursor getServiceProviderInfo() {
         String query = "SELECT _id, USERNAME, ASSIGNEDSERVICES FROM " + TABLE_USERS
                 + " WHERE USERTYPE = \"" + DATABASE_TYPE_SERVICE_PROVIDER + "\"";
@@ -436,6 +437,17 @@ public class DBHandler extends SQLiteOpenHelper {
         entryCursor.moveToFirst();
 
         return entryCursor.getString(0);
+    }
+
+    public String getEmailByName(String name){
+        String query = "SELECT EMAIL  FROM " + TABLE_USERS + " WHERE USERNAME = \"" + name + "\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor entryCursor = db.rawQuery(query, null);
+
+        entryCursor.moveToFirst();
+
+        return entryCursor.getString(0);
+
     }
 
     public boolean assignSerivce(String email, String service) {
@@ -726,4 +738,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return entryCursor.getString(0);
 
     }
+
+
 }

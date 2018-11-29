@@ -9,21 +9,21 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/nameField"
+            android:id="@+id/id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Name" />
+            android:text="idd" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/Service_Text_Field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Service" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/available_Date_Field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="displayDate"
             android:text="Book" />
 
     </LinearLayout>
