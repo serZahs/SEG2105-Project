@@ -57,7 +57,7 @@ public class ServiceProviderMainActivity extends AppCompatActivity {
     }
 
     private void updateServicesList() {
-        Cursor cursor = db.getServicesTable();
+        Cursor cursor = db.getServicesTable(email);
         String[] projections = new String[] {db.COLUMN_ID, db.COLUMN_SERVICE_NAME, db.COLUMN_SERVICE_RATE};
         int[] cols = new int[] {R.id.serviceID, R.id.serviceName, R.id.serviceRate};
         SimpleCursorAdapter cursorAdapter;
@@ -76,6 +76,7 @@ public class ServiceProviderMainActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+
 
 
 }
