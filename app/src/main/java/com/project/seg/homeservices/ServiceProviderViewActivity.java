@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class ServiceProviderViewActivity extends AppCompatActivity {
 
@@ -15,6 +16,7 @@ public class ServiceProviderViewActivity extends AppCompatActivity {
     ListView listOfServices;
     ServiceProviderViewListAdapter mAdapter;
     RatingBar rating;
+    TextView ratingText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,15 @@ public class ServiceProviderViewActivity extends AppCompatActivity {
         listOfServices.setAdapter(mAdapter);
 
         rating = findViewById(R.id.spRating);
+        ratingText = findViewById(R.id.spRatingText);
         rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 db.addRating(email, rating);
+                ratingText.setText("Rating is " + db.getRating(email));
             }
         });
 
-        rating.setRating(db.getRating(email));
+        ratingText.setText("Rating is " + db.getRating(email));
     }
 }
