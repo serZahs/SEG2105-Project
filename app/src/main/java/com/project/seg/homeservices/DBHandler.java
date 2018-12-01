@@ -178,9 +178,6 @@ public class DBHandler extends SQLiteOpenHelper {
      * @return boolean whether or not a user inputs were valid
      */
     public boolean isValidUser(String email, String password) {
-        if (!isValidEmail(email)) // immediately return false if invalid email
-            return false;
-
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT EMAIL, PASSWORD FROM " + TABLE_USERS + " WHERE EMAIL = \""
                 + email + "\" AND PASSWORD = \"" + password + "\"";
@@ -237,12 +234,12 @@ public class DBHandler extends SQLiteOpenHelper {
      *
      * @return boolean whether or not there exists an admin in the database (true if there is none)
      */
-    public boolean alreadyExistsAdmin() {
+    public boolean adminExists() {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE USERTYPE = \"ADMIN\"";
         Cursor checkCursor = db.rawQuery(query, null);
 
-        if (!checkCursor.moveToFirst())
+        if (checkCursor.moveToFirst())
             return true;
 
         return false;
@@ -260,36 +257,37 @@ public class DBHandler extends SQLiteOpenHelper {
      * @return boolean whether or not the user was created (for validity)
      */
     public boolean createUser(String email, String username, String password, String type) {
-        if (!isValidEmail(email)) // immediately return false if invalid email
-            return false;
-
-        SQLiteDatabase db = this.getWritableDatabase();
+        /*if (!isValidEmail(email)) // immediately return false if invalid email
+            return false;*/
 
         if (!isAvailableEmail(email) || !isAvailableUsername(username))
             return false;
 
-        if (type.equals(DATABASE_TYPE_ADMIN) && !alreadyExistsAdmin())
+        if (type.equals(DATABASE_TYPE_ADMIN) && adminExists())
             return false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
 
         // add account to table if the account is valid
         ContentValues values = new ContentValues();
-
         values.put(COLUMN_EMAIL, email);
         values.put(COLUMN_USERNAME, username);
         values.put(COLUMN_PASSWORD, password);
         values.put(COLUMN_USER_TYPE, type);
 
-
-        db.insert(TABLE_USERS, null, values);
+        long newRowId = db.insert(TABLE_USERS, null, values);
+        if (newRowId == -1)
+            return false;
 
         if (type.equals(DATABASE_TYPE_SERVICE_PROVIDER)) {
             ContentValues availability_values = new ContentValues();
             availability_values.put(COLUMN_EMAIL, email);
 
-            db.insert(TABLE_AVAILABILITIES, null, availability_values);
+            newRowId = db.insert(TABLE_AVAILABILITIES, null, availability_values);
+            if (newRowId == -1)
+                return false;
         }
         db.close();
-
         return true;
     }
 
