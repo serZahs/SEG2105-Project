@@ -141,7 +141,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        if (password.length() <= 5 || password.length() > 20)
+        if (password.length() <= 3 || password.length() > 20)
             return false;
         return true;
     }
