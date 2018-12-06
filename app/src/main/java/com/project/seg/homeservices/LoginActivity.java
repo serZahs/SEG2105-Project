@@ -217,5 +217,9 @@ public class LoginActivity extends AppCompatActivity  {
             showProgress(false);
         }
     }
+
+    public void clearDatabase(View view) {
+        db.deleteTables();
+    }
 }
 
