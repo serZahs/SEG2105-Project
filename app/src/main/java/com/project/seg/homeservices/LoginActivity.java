@@ -41,8 +41,6 @@ public class LoginActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_login);
         // Set up the database
         db = new DBHandler(this);
-        //TODO:
-        db.deleteTables();
 
         // Set up the login form.
         mEmailView = findViewById(R.id.email);
